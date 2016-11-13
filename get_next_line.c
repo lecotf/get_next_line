@@ -13,25 +13,25 @@
 #include <errno.h>
 
 #include <sys/types.h>	// include open
-#include <sys/stat.h>	  // include open (à supprimer si on ne fait pas d'appel à open dans le fichier)
-#include <fcntl.h>	    // include open
+#include <sys/stat.h>	// include open (à supprimer si on ne fait pas d'appel à open dans le fichier)
+#include <fcntl.h>	// include open
 
 # define SIZE_BUFFER (128)
 
-static char		        *ret_line(char *line, char *buffer, ssize_t *compt, ssize_t size_line) // Alloue/Réalloue de la mémoire à line afin d'y copier le contenu du READ stocké dans buffer
+static char		*ret_line(char *line, char *buffer, ssize_t *compt, ssize_t size_line) // Alloue/Réalloue de la mémoire à line afin d'y copier le contenu du READ stocké dans buffer
 {
   register const char	*temp;
-  ssize_t		          len_line;
-  ssize_t	          	i;
+  ssize_t		len_line;
+  ssize_t		i;
 
   errno = 0;
   if (line == NULL) // Première allocation de mémoire de line, correspond aux "SIZE_BUFFER" premiers caractères lus depuis l'appel de GNL
     {
       if ((line = malloc((size_t)size_line + 1)) == NULL)
-      	{
-	        fprintf(stderr, "Error : Couldn't allocate memory (%s).\n", strerror(errno));
-	        exit(EXIT_FAILURE);
-	      }
+	{
+	  fprintf(stderr, "Error : Couldn't allocate memory (%s).\n", strerror(errno));
+	  exit(EXIT_FAILURE);
+	}
       len_line = 0;
     }
   else // Réalloue de la mémoire à line afin de copier le contenu de buffer à la fin de line
@@ -39,10 +39,10 @@ static char		        *ret_line(char *line, char *buffer, ssize_t *compt, ssize_t
       for (temp = line; *temp; ++temp); // Strlen non typé
       len_line = temp - line;           //
       if ((line = realloc(line, (size_t)len_line + (size_t)size_line + 1)) == NULL)
-	      {
-	        fprintf(stderr, "Error : Couldn't reallocate memory (%s).\n", strerror(errno));
-	        exit(EXIT_FAILURE);
-	      }
+	{
+	  fprintf(stderr, "Error : Couldn't reallocate memory (%s).\n", strerror(errno));
+	  exit(EXIT_FAILURE);
+	}
     }
   for (i = 0; i < size_line; i++)              //
     line[len_line + i] = buffer[(*compt) + i]; // Concatène notre buffer (la dernière lecture) derrière line (ce qui a été lu depuis le début) ou copie au début si c'est la première lecture
@@ -51,13 +51,13 @@ static char		        *ret_line(char *line, char *buffer, ssize_t *compt, ssize_t
   return (line);
 }
 
-char      			*get_next_line(const int fd)
+char			*get_next_line(const int fd)
 {
-  static char		  buffer[SIZE_BUFFER + 1];
+  static char		buffer[SIZE_BUFFER + 1];
   static ssize_t	compt = 0;
   static ssize_t	size_read = 0;
-  ssize_t		      size_line;
-  char			      *line; // Variable qui stockera le retour du GNL
+  ssize_t		size_line;
+  char			*line; // Variable qui stockera le retour du GNL
 
   for (size_line = 0, line = NULL, errno = 0 ;; size_line++) // Boucle infinie volontaire, s'il y a une erreur de lecture ou qu'il n'y a plus rien à lire elle sera interrompue avec un return.
     {
@@ -90,32 +90,32 @@ char      			*get_next_line(const int fd)
 ** NB : Ne pas oublier de free les chaînes retournées par get_next_line lorsque vous n'en avez plus l'utilité.
 */
 
-int     main(int ac, char **av)
+int		main(int ac, char **av)
 {
-  char  *str;
-  int   fd;
+  char		*str;
+  int		fd;
   
   str = NULL;
   errno = 0;
   if (ac == 2)
     {
       if ((fd = open(av[1], O_RDONLY)) == -1)
-      	{
-	       fprintf(stderr, "Error : Couldn't open \"%s\" (%s).\n", av[1], strerror(errno));
-	       return (1);
-      	}
+	{
+	  fprintf(stderr, "Error : Couldn't open \"%s\" (%s).\n", av[1], strerror(errno));
+	  return (1);
+	}
     }
   else
     fd = 0;
   for (;;)
     {
       if ((str = get_next_line(fd)) != NULL)
-      	{
-	        printf("%s\n", str);
-	        free(str);
-	      }
+	{
+	  printf("%s\n", str);
+	  free(str);
+	}
       else
-	      return (0);
+	return (0);
     }
 }
 
