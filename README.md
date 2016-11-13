@@ -11,4 +11,4 @@ Un buffer est défini (SIZE_BUFFER), il désigne le nombre de caractères lus au
 NB : Ne pas oublier de *free* les chaînes retournées par *get_next_line* lorsque vous n'en avez plus l'utilité.
 
 Ce projet était à l'origine un exercice donné lors de mon cursus au sein d'EPITECH.
-Si vous êtes étudiant à EPITECH ou 42 et que vous souhaitez réutiliser ce code, pensez à remplacer certaines fonctions et de remplacer la structure de contrôle "for" par un "while" afin de respecter le sujet et la norme de votre école (fonctions interdites : strerror, exit, realloc et fprintf).
+Si vous êtes étudiant à EPITECH ou 42 et que vous souhaitez réutiliser ce code, pensez à remplacer certaines fonctions ainsi que la structure de contrôle "for" par un "while" afin de respecter le sujet et la norme de votre école (fonctions interdites : strerror, exit, realloc et fprintf).
