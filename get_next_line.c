@@ -20,7 +20,7 @@
 
 static char		*ret_line(char *line, char *buffer, ssize_t *compt, ssize_t size_line) // Alloue/Réalloue de la mémoire à line afin d'y copier le contenu du READ stocké dans buffer
 {
-  register const char	*temp;
+  const char		*temp;
   ssize_t		len_line;
   ssize_t		i;
 
